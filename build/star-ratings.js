@@ -166,9 +166,9 @@ var StarRatings = function (_React$Component) {
           numberOfStars = _props3.numberOfStars,
           starDimension = _props3.starDimension,
           starSpacing = _props3.starSpacing,
-          starRatedColor = _props3.starRatedColor,
+          recievedStarRatedColor = _props3.starRatedColor,
           starEmptyColor = _props3.starEmptyColor,
-          starHoverColor = _props3.starHoverColor,
+          recievedStarHoverColor = _props3.starHoverColor,
           gradientPathName = _props3.gradientPathName,
           ignoreInlineStyles = _props3.ignoreInlineStyles,
           svgIconPath = _props3.svgIconPath,
@@ -186,6 +186,30 @@ var StarRatings = function (_React$Component) {
         var hoverMode = highestStarHovered > 0;
         var isHovered = starRating <= highestStarHovered;
         var isCurrentHoveredStar = starRating === highestStarHovered;
+
+        var starRatedColor = function () {
+          if (typeof recievedStarRatedColor === 'string') {
+            return recievedStarRatedColor;
+          }
+
+          var rangeObject = isStarred ? recievedStarRatedColor.find(function (ratedColor) {
+            return selectedRating <= ratedColor.range[1];
+          }) : undefined;
+
+          return rangeObject ? rangeObject.color : 'rgb(109, 122, 130)';
+        }();
+
+        var starHoverColor = function () {
+          if (typeof recievedStarHoverColor === 'string') {
+            return recievedStarHoverColor;
+          }
+
+          var rangeObject = hoverMode ? recievedStarHoverColor.find(function (hoverColor) {
+            return highestStarHovered >= hoverColor.range[0] && highestStarHovered <= hoverColor.range[1];
+          }) : undefined;
+
+          return rangeObject ? rangeObject.color : 'rgb(230, 67, 47)';
+        }();
 
         // only matters when changeRating is false
         // given star 5 and rating 4.2:  5 > 4.2 && 4 < 4.2;
@@ -230,8 +254,8 @@ StarRatings.propTypes = {
   rating: _propTypes2.default.number.isRequired,
   numberOfStars: _propTypes2.default.number.isRequired,
   changeRating: _propTypes2.default.func,
-  starHoverColor: _propTypes2.default.string.isRequired,
-  starRatedColor: _propTypes2.default.string.isRequired,
+  starRatedColor: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.array]).isRequired,
+  starHoverColor: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.array]).isRequired,
   starEmptyColor: _propTypes2.default.string.isRequired,
   starDimension: _propTypes2.default.string.isRequired,
   starSpacing: _propTypes2.default.string.isRequired,

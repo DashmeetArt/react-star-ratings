@@ -89,9 +89,9 @@ class StarRatings extends React.Component {
       numberOfStars,
       starDimension,
       starSpacing,
-      starRatedColor,
+      starRatedColor: recievedStarRatedColor,
       starEmptyColor,
-      starHoverColor,
+      starHoverColor: recievedStarHoverColor,
       gradientPathName,
       ignoreInlineStyles,
       svgIconPath,
@@ -109,6 +109,30 @@ class StarRatings extends React.Component {
       const hoverMode = highestStarHovered > 0;
       const isHovered = starRating <= highestStarHovered;
       const isCurrentHoveredStar = starRating === highestStarHovered;
+
+      const starRatedColor = (() => {
+          if (typeof recievedStarRatedColor === 'string') {
+              return recievedStarRatedColor;
+          }
+
+          const rangeObject = isStarred ? recievedStarRatedColor.find((ratedColor) => {
+            return selectedRating <= ratedColor.range[1];
+          }) : undefined;
+
+          return rangeObject ? rangeObject.color : 'rgb(109, 122, 130)';
+      })();
+
+      const starHoverColor = (() => {
+          if (typeof recievedStarHoverColor === 'string') {
+              return recievedStarHoverColor;
+          }
+
+          const rangeObject = hoverMode ? recievedStarHoverColor.find((hoverColor) => {
+            return highestStarHovered >= hoverColor.range[0] && highestStarHovered <= hoverColor.range[1];
+          }) : undefined;
+
+          return rangeObject ? rangeObject.color : 'rgb(230, 67, 47)';
+      })();
 
       // only matters when changeRating is false
       // given star 5 and rating 4.2:  5 > 4.2 && 4 < 4.2;
@@ -180,8 +204,14 @@ StarRatings.propTypes = {
   rating: PropTypes.number.isRequired,
   numberOfStars: PropTypes.number.isRequired,
   changeRating: PropTypes.func,
-  starHoverColor: PropTypes.string.isRequired,
-  starRatedColor: PropTypes.string.isRequired,
+  starRatedColor: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
+  ]).isRequired,
+  starHoverColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]).isRequired,
   starEmptyColor: PropTypes.string.isRequired,
   starDimension: PropTypes.string.isRequired,
   starSpacing: PropTypes.string.isRequired,

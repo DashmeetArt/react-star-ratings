@@ -34,6 +34,20 @@ class App extends Component {
         </div>
         <div>
           <StarRatings
+            rating={this.state.rating}
+            starRatedColor={[
+                { range: [1, 2], color: 'red' },
+                { range: [3, 3], color: 'yellow' },
+                { range: [4, 5], color: 'green' }]}
+            starHoverColor={[
+                { range: [1, 2], color: 'red' },
+                { range: [3, 3], color: 'yellow' },
+                { range: [4, 5], color: 'green' }]}
+            changeRating={this.changeRating}
+          />
+        </div>
+        <div>
+          <StarRatings
             rating={2.403}
             starDimension="30px"
             starSpacing="15px"
